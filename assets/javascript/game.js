@@ -14,12 +14,13 @@ var words = ["Terminator",
 		"Kindergarten Cop"];
 var currentWord = words[Math.floor(Math.random() * words.length)];
 var remainingLetters = currentWord;
-var guessesRemaining = 15;
+var guessesRemaining = 20;
 var wins = 0;
 var losses = 0;
 var userGuess = "";
 var correctGuessedLetters = [];
 var guessThisWord = [];
+var lettersGuessed = "";
 
 
 //Display info at start of new game
@@ -43,6 +44,7 @@ function hideWord (word) {
 	for (i=0; i<word.length; i++) {
 			guessThisWord[i] = "_ ";	
 		}
+		guessThisWord.join("");
 		console.log(word); 
 	}
 
@@ -52,6 +54,7 @@ function restartGame () {
 	userGuess = "";
 	correctGuessedLetters = [];
 	guessThisWord = [];
+	lettersGuessed = "";
 	
 	//Pick new movie title
 	currentWord = words[Math.floor(Math.random() * words.length)];
@@ -73,7 +76,12 @@ document.onkeyup = function (event) {
 	checkGuess(currentWord);
 	guessesRemaining -= 1;
 
-	console.log(guessThisWord);
+	//Compile a list of letters guessed
+	lettersGuessed += userGuess.toUpperCase();
+	lettersGuessed += " ";
+
+	console.log("Guess the word: " + guessThisWord.join(""));
+	console.log("These letters have been guessed: " + lettersGuessed);
 	//console.log("got that right: " + guessedRight);
 	if (guessThisWord.join("") === currentWord) {
 		console.log("You win!!!");
@@ -81,7 +89,8 @@ document.onkeyup = function (event) {
 		restartGame();
 	}
 
-	console.log(guessesRemaining);
+	console.log("enter a key");
+	console.log("Guesses remaining: " + guessesRemaining);
 	if (guessesRemaining === 0) {
 		console.log("You're a loser!!!!")
 		losses +=1;
@@ -91,7 +100,6 @@ document.onkeyup = function (event) {
 
 //Checks the users guess against the word
 function checkGuess (word) {
-	console.log("enter a key");
 	for (i=0; i<word.length; i++) {
 			//console.log("The current letter in the loop is: " + word[i]);
 		if (userGuess === word[i].toLowerCase()) {
@@ -101,7 +109,8 @@ function checkGuess (word) {
 			guessThisWord[i] = word[i];
 			//Display: Letters guessed so far for the word ("g _ a _ e" for "game")
 			console.log(guessThisWord);
-		} 
+			
+		}
 	}
 }
 
