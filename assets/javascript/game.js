@@ -8,10 +8,11 @@ var words = ["Terminator",
 		"Predator",
 		"Commando",
 		"Conan The Barbarian",
-		"Total Recal",
+		"Total Recall",
 		"Terminator 2",
 		"Conan The Destroyer",
 		"Kindergarten Cop"];
+
 var currentWord = words[Math.floor(Math.random() * words.length)];
 var remainingLetters = currentWord;
 var guessesRemaining = 20;
@@ -25,18 +26,75 @@ var lettersGuessed = "";
 
 //Display info at start of new game
 function newGameDisplay () {
-	console.log("New Game!!!");
-	//Display: "Press any key to get started!"
-	console.log("Press any key to get started!");
-		
+	document.getElementById("header").innerHTML = "<p>Arnold Movie Hangman!!!</p>";
+	document.getElementById("new-game").innerHTML = "<p>New Game!!!</p>";
+
+		//Display: "Press any key to get started!"
+	document.getElementById("press-play").innerHTML = "<p>Press any key to get started!</p>";		
+}
+
+//Displays updated stats
+function inGameDisplay () {
+	//Hide these messages
+	document.getElementById("winner-loser").innerHTML = "";
+	document.getElementById("new-game").innerHTML = "";
+	document.getElementById("press-play").innerHTML = "";	
+	hideGif();
+	
 	//Display: Number of wins
-	console.log("Wins: " + wins);
+	document.getElementById("wins").innerHTML = "<p>Wins: " + wins + "</p>";	
 
 	//Display: Number of loses
-	console.log("Loses: " + losses);
+	document.getElementById("losses").innerHTML = "<p>Losses: " + losses + "</p>";	
+
+	//DIsplay: The current word(s) to guess
+	document.getElementById("current-word").innerHTML = "<p>Guess the word(s) : " + guessThisWord.join("") + "</p>";	
 
 	//Display: Number of guesses remaining
-	console.log("Guesses remaining: " + guessesRemaining);
+	document.getElementById("guesses-remaining").innerHTML = "<p>Guesses remaining: " + guessesRemaining + "</p>";
+
+	//Display: Letters guessed so far
+	document.getElementById("letters-guessed").innerHTML = "<p>Letters guessed so far: " + lettersGuessed + "</p>";	
+
+}
+
+function wait(ms) {
+	var start = new Date().getTime();
+	var end = start;
+	while ( end < start + ms ) {
+		end = new Date().getTime();
+	}
+}
+
+function hideElements () {
+	//Hide other display elements until a new game starts
+	document.getElementById("new-game").innerHTML = "";
+	document.getElementById("press-play").innerHTML = "";	
+	document.getElementById("wins").innerHTML = "";	
+	document.getElementById("losses").innerHTML = "";	
+	document.getElementById("current-word").innerHTML = "";	
+	document.getElementById("guesses-remaining").innerHTML = "";
+}
+
+function showGif () {
+		document.getElementById("movie-gif").src = "assets/images/" + currentWord + ".gif";
+}
+
+function hideGif () {
+	document.getElementById("movie-gif").src = "";
+}
+
+function winner () {
+	document.getElementById("winner-loser").innerHTML = "<p>You're A Winner!!!</p>";
+	hideElements();
+
+	//function for showing cool Arnold gif for the movie
+	showGif();
+}
+
+function loser () {
+	document.getElementById("winner-loser").innerHTML = "<p>You're A Loser!!!</p>";
+	hideElements();
 }
 
 //Display: A "_ " (underscore and space) for each character in the word ( "_ _ _" for "cat")
@@ -45,12 +103,12 @@ function hideWord (word) {
 			guessThisWord[i] = "_ ";	
 		}
 		guessThisWord.join("");
-		console.log(word); 
+		//console.log(word); 
 	}
 
 //Reset in-game stats
 function restartGame () {
-	guessesRemaining = 20;
+	guessesRemaining = 21;
 	userGuess = "";
 	correctGuessedLetters = [];
 	guessThisWord = [];
@@ -72,7 +130,6 @@ restartGame();
 //Event listener for keyup to register when the user types a letter
 document.onkeyup = function (event) {
 	userGuess = event.key.toLowerCase();
-	console.log(userGuess);
 	checkGuess(currentWord);
 	guessesRemaining -= 1;
 
@@ -80,22 +137,24 @@ document.onkeyup = function (event) {
 	lettersGuessed += userGuess.toUpperCase();
 	lettersGuessed += " ";
 
-	console.log("Guess the word: " + guessThisWord.join(""));
-	console.log("These letters have been guessed: " + lettersGuessed);
+	//Update game stats
+	inGameDisplay();
+	
+
 	//console.log("got that right: " + guessedRight);
 	if (guessThisWord.join("") === currentWord) {
-		console.log("You win!!!");
+		winner();
 		wins += 1;
 		restartGame();
 	}
 
-	console.log("enter a key");
-	console.log("Guesses remaining: " + guessesRemaining);
+	// console.log("Guesses remaining: " + guessesRemaining);
 	if (guessesRemaining === 0) {
-		console.log("You're a loser!!!!")
+		loser();
 		losses +=1;
 		restartGame();
 	}
+	
 }
 
 //Checks the users guess against the word
