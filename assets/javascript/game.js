@@ -74,6 +74,7 @@ function hideElements () {
 	document.getElementById("losses").innerHTML = "";	
 	document.getElementById("current-word").innerHTML = "";	
 	document.getElementById("guesses-remaining").innerHTML = "";
+	document.getElementById("letters-guessed").innerHTML = "";	
 }
 
 function showGif () {
